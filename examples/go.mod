@@ -4,7 +4,7 @@ go 1.26.8
 
 require (
 	charm.land/bubbles/v2 v2.2.1
-	charm.land/bubbletea/v2 v2.1.0
+	charm.land/bubbletea/v2 v2.1.1
 	github.com/NimbleMarkets/go-booba v0.10.3
 	github.com/hajimehoshi/ebiten/v2 v2.10.5
 	nimbleterminal.dev/ntcanvas v0.1.1
