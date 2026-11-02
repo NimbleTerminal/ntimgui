@@ -3,7 +3,7 @@ module nimbleterminal.dev/ntui
 go 1.26.8
 
 require (
-	charm.land/bubbletea/v2 v2.1.0
+	charm.land/bubbletea/v2 v2.1.1
 	github.com/hajimehoshi/ebiten/v2 v2.10.5
 	github.com/mattn/go-runewidth v0.0.31
 	golang.org/x/image v0.47.0
