@@ -9,12 +9,12 @@ import (
 
 	"charm.land/bubbles/v2/key"
 	tea "charm.land/bubbletea/v2"
-	booba "github.com/NimbleMarkets/go-booba"
-	"github.com/NimbleMarkets/go-booba/actions"
-	"github.com/NimbleMarkets/go-booba/actions/bubblehelp"
+	booba "nimbleterminal.dev/booba"
+	"nimbleterminal.dev/booba/actions"
+	"nimbleterminal.dev/booba/actions/bubblehelp"
 )
 
-// Demo is implemented by interactive ntimgui examples hosted via go-booba.
+// Demo is implemented by interactive ntimgui examples hosted via booba.
 type Demo interface {
 	tea.Model
 	Help() []key.Binding
@@ -61,7 +61,7 @@ func Run(m Demo) error {
 	return booba.Run(wrapped)
 }
 
-// Main runs m via go-booba and exits non-zero on error.
+// Main runs m via booba and exits non-zero on error.
 func Main(m Demo) {
 	if err := Run(m); err != nil {
 		fmt.Fprintln(os.Stderr, err)

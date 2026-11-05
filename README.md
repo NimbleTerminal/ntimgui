@@ -97,7 +97,7 @@ For a minimal standalone Ebitengine window, run `task run-ebiten` or
 `go -C examples run ./ebiten`. The [example](examples/ebiten/main.go) demonstrates
 mouse/keyboard input, a draggable panel, and fractional scaling on resize.
 
-## Examples (Native & Browser WASM via `go-booba`)
+## Examples (Native & Browser WASM via `booba`)
 
 Run the interactive examples natively in your terminal:
 
@@ -112,7 +112,7 @@ task run-dashboard
 task run-hud
 ```
 
-Or build and serve all three demos in the browser via [`go-booba`](https://github.com/NimbleMarkets/go-booba) and `ghostty-web` (with OSC 7501 touch/action bars):
+Or build and serve all three demos in the browser via [`booba`](https://github.com/NimbleTerminal/booba) and `ntwebterm` (with OSC 7501 touch/action bars):
 
 ```sh
 task serve-wasm-site

@@ -1,7 +1,7 @@
 # Examples
 
 Run these from the repository root. Each browser demo publishes its keys through
-[go-booba](https://github.com/NimbleMarkets/go-booba) so the same actions appear
+[booba](https://github.com/NimbleTerminal/booba) so the same actions appear
 as buttons above the terminal.
 
 | Command | What it shows | Controls |
@@ -13,7 +13,7 @@ as buttons above the terminal.
 Use `q` or `Ctrl+C` to quit the terminal demos. `task serve-wasm-site` builds the WASM demos and
 serves all six interactive presets at `http://localhost:8000/web/`.
 
-The `examples` module owns `go-booba` and `ntpicture`. Browser builds select
+The `examples` module owns `booba` and `ntpicture`. Browser builds select
 `wasm.work` and its Bubble Tea replacement so no demo-only dependencies are
 added to `ntimgui`'s root module.
 
