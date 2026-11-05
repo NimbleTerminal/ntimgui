@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Neomantra Corp.
 
-package ntui
+package ntimgui
 
 // PanelConfig configures a floating or docked panel created with BeginPanel.
 type PanelConfig struct {

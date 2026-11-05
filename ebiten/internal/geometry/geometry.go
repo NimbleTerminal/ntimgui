@@ -7,7 +7,7 @@ import (
 	"image"
 	"math"
 
-	"nimbleterminal.dev/ntui"
+	"nimbleterminal.dev/ntimgui"
 )
 
 // Transform maps logical cell edges to destination coordinates. Offset is
@@ -23,7 +23,7 @@ func (t Transform) Valid() bool {
 
 // Rect rounds absolute edges, never separately rounded cell widths. Invalid,
 // empty, or unrepresentable rectangles produce an empty rectangle.
-func (t Transform) Rect(r ntui.Rect, origin image.Point) image.Rectangle {
+func (t Transform) Rect(r ntimgui.Rect, origin image.Point) image.Rectangle {
 	if r.Empty() || !t.Valid() {
 		return image.Rectangle{}
 	}

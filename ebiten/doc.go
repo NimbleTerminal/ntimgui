@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Neomantra Corp.
 
-// Package ntuiebiten renders ntui command snapshots into caller-owned Ebitengine
-// images. It is an optional subpackage: importing ntui alone does not initialize
+// Package ntimguiebiten renders ntimgui command snapshots into caller-owned Ebitengine
+// images. It is an optional subpackage: importing ntimgui alone does not initialize
 // Ebitengine or require a graphics environment.
 //
 // Construct New and call Backend.Render in an Ebitengine callback. Render accepts
@@ -18,7 +18,7 @@
 // and destination bounds; text is additionally clipped to its original Bounds.
 // Clipping never recenters text, changes gauge fractions, or resamples plots.
 //
-// Colors are straight-alpha ntui.RGBA, converted through color.NRGBA for vector
+// Colors are straight-alpha ntimgui.RGBA, converted through color.NRGBA for vector
 // primitives and text ColorScale. The default font is bundled Go Mono regular
 // and bold, automatically sized for the cell scale. WithFontFaces accepts custom
 // horizontal faces at a fixed pixel size. Alignment uses measured text advances,
@@ -45,4 +45,4 @@
 // image path would read GPU pixels. ntebitengine users render the scene and this
 // overlay into the same DrawFunc destination, leaving the single final readback
 // and presentation pacing to that adapter.
-package ntuiebiten
+package ntimguiebiten

@@ -13,9 +13,9 @@ import (
 
 	"charm.land/bubbles/v2/key"
 	tea "charm.land/bubbletea/v2"
+	"nimbleterminal.dev/ntimgui"
+	"nimbleterminal.dev/ntimgui/examples/internal/demohelp"
 	picture "nimbleterminal.dev/ntpicture"
-	"nimbleterminal.dev/ntui"
-	"nimbleterminal.dev/ntui/examples/internal/demohelp"
 )
 
 type tickMsg time.Time
@@ -32,14 +32,14 @@ var passNames = []string{
 	"03 FurShellPass",
 	"04 SkyboxEnv",
 	"05 BloomDownUp",
-	"06 ntuiOverlay",
+	"06 ntimguiOverlay",
 }
 
 type dashboardModel struct {
 	session *picture.TerminalSession
-	ui      *ntui.Context
-	glyph   *ntui.GlyphBackend
-	raster  *ntui.RasterBackend
+	ui      *ntimgui.Context
+	glyph   *ntimgui.GlyphBackend
+	raster  *ntimgui.RasterBackend
 	pic     *picture.Picture
 
 	width, height int
@@ -82,9 +82,9 @@ func newDashboardModel() *dashboardModel {
 
 	m := &dashboardModel{
 		session:   session,
-		ui:        ntui.New(ntui.WithScreenSize(92, 28), ntui.WithTheme(ntui.CyberpunkTheme())),
-		glyph:     ntui.NewGlyphBackend(92, 28),
-		raster:    ntui.NewRasterBackend(9, 18),
+		ui:        ntimgui.New(ntimgui.WithScreenSize(92, 28), ntimgui.WithTheme(ntimgui.CyberpunkTheme())),
+		glyph:     ntimgui.NewGlyphBackend(92, 28),
+		raster:    ntimgui.NewRasterBackend(9, 18),
 		pic:       pic,
 		width:     92,
 		height:    28,
@@ -122,7 +122,7 @@ func (m *dashboardModel) buildFrame() {
 	m.ui.BeginFrame()
 
 	// Panel 1: Real-time Frame Pacing & GPU Load
-	if m.ui.BeginPanel("GPU Frame Pacing & Telemetry", ntui.NewRect(1, 1, 44, 15)) {
+	if m.ui.BeginPanel("GPU Frame Pacing & Telemetry", ntimgui.NewRect(1, 1, 44, 15)) {
 		latestMS := m.frameHist[len(m.frameHist)-1]
 		fps := 1000.0 / max(1.0, latestMS)
 		m.ui.KeyValue("Frame Time / FPS", fmt.Sprintf("%.2f ms (%.0f FPS)", latestMS, fps))
@@ -145,7 +145,7 @@ func (m *dashboardModel) buildFrame() {
 	m.ui.EndPanel()
 
 	// Panel 2: Render Pass Breakdown
-	if m.ui.BeginPanel("Render Pass Breakdown", ntui.NewRect(47, 1, 43, 15)) {
+	if m.ui.BeginPanel("Render Pass Breakdown", ntimgui.NewRect(47, 1, 43, 15)) {
 		m.ui.PlotHistogram("Pass Duration", m.passTimes, 39, 3, "6 Active Passes")
 		m.ui.Separator()
 		m.ui.ListBox("Select Pass", &m.selectedPass, passNames, 6)
@@ -156,7 +156,7 @@ func (m *dashboardModel) buildFrame() {
 	m.ui.EndPanel()
 
 	// Panel 3: Simulation & Theme Controls
-	if m.ui.BeginPanel("Simulation & Display Controls", ntui.NewRect(1, 17, 89, 10)) {
+	if m.ui.BeginPanel("Simulation & Display Controls", ntimgui.NewRect(1, 17, 89, 10)) {
 		m.ui.SliderInt("Scene Instances", &m.instances, 200, 3000)
 		m.ui.SliderFloat("Frame Budget", &m.gpuLimit, 8.3, 33.3, "%.1f ms")
 		m.ui.Separator()
@@ -164,13 +164,13 @@ func (m *dashboardModel) buildFrame() {
 		m.ui.BeginHorizontal()
 		m.ui.Label("Theme:")
 		if m.ui.RadioButtonInt("Cyberpunk", &m.themeMode, 0) {
-			m.ui.Theme = ntui.CyberpunkTheme()
+			m.ui.Theme = ntimgui.CyberpunkTheme()
 		}
 		if m.ui.RadioButtonInt("CRT Amber", &m.themeMode, 1) {
-			m.ui.Theme = ntui.AmberTheme()
+			m.ui.Theme = ntimgui.AmberTheme()
 		}
 		if m.ui.RadioButtonInt("HUD Dark", &m.themeMode, 2) {
-			m.ui.Theme = ntui.HUDTheme()
+			m.ui.Theme = ntimgui.HUDTheme()
 		}
 		m.ui.EndHorizontal()
 
@@ -239,11 +239,11 @@ func (m *dashboardModel) Summary() string {
 func (m *dashboardModel) applyTheme() {
 	switch m.themeMode {
 	case 1:
-		m.ui.Theme = ntui.AmberTheme()
+		m.ui.Theme = ntimgui.AmberTheme()
 	case 2:
-		m.ui.Theme = ntui.HUDTheme()
+		m.ui.Theme = ntimgui.HUDTheme()
 	default:
-		m.ui.Theme = ntui.CyberpunkTheme()
+		m.ui.Theme = ntimgui.CyberpunkTheme()
 	}
 }
 

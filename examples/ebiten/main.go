@@ -11,8 +11,8 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/inpututil"
 	"github.com/hajimehoshi/ebiten/v2/vector"
-	"nimbleterminal.dev/ntui"
-	ntuiebiten "nimbleterminal.dev/ntui/ebiten"
+	"nimbleterminal.dev/ntimgui"
+	ntimguiebiten "nimbleterminal.dev/ntimgui/ebiten"
 )
 
 // A fixed logical grid keeps hit testing and rendering in agreement as the
@@ -20,9 +20,9 @@ import (
 const columns, rows = 80, 30
 
 type game struct {
-	ui            *ntui.Context
-	backend       *ntuiebiten.Backend
-	commands      []ntui.DrawCmd
+	ui            *ntimgui.Context
+	backend       *ntimguiebiten.Backend
+	commands      []ntimgui.DrawCmd
 	width, height int
 	speed, phase  float64
 	paused, light bool
@@ -35,7 +35,7 @@ func (g *game) Update() error {
 		}
 		return ebiten.Termination
 	}
-	// Map Ebitengine input directly to ntui's logical cells. No Bubble Tea loop
+	// Map Ebitengine input directly to ntimgui's logical cells. No Bubble Tea loop
 	// or ProcessInput adapter is necessary in an ordinary Ebitengine game.
 	x, y := ebiten.CursorPosition()
 	in := &g.ui.Input
@@ -47,18 +47,18 @@ func (g *game) Update() error {
 	_, wheel := ebiten.Wheel()
 	in.WheelY = -int(wheel)
 	for _, key := range []struct {
-		ebiten ebiten.Key
-		ntui   ntui.KeyCode
+		ebiten  ebiten.Key
+		ntimgui ntimgui.KeyCode
 	}{
-		{ebiten.KeyTab, ntui.KeyTab}, {ebiten.KeyEnter, ntui.KeyEnter},
-		{ebiten.KeySpace, ntui.KeySpace}, {ebiten.KeyArrowLeft, ntui.KeyLeft},
-		{ebiten.KeyArrowRight, ntui.KeyRight}, {ebiten.KeyArrowUp, ntui.KeyUp},
-		{ebiten.KeyArrowDown, ntui.KeyDown},
+		{ebiten.KeyTab, ntimgui.KeyTab}, {ebiten.KeyEnter, ntimgui.KeyEnter},
+		{ebiten.KeySpace, ntimgui.KeySpace}, {ebiten.KeyArrowLeft, ntimgui.KeyLeft},
+		{ebiten.KeyArrowRight, ntimgui.KeyRight}, {ebiten.KeyArrowUp, ntimgui.KeyUp},
+		{ebiten.KeyArrowDown, ntimgui.KeyDown},
 	} {
 		if inpututil.IsKeyJustPressed(key.ebiten) {
-			code := key.ntui
-			if code == ntui.KeyTab && ebiten.IsKeyPressed(ebiten.KeyShift) {
-				code = ntui.KeyShiftTab
+			code := key.ntimgui
+			if code == ntimgui.KeyTab && ebiten.IsKeyPressed(ebiten.KeyShift) {
+				code = ntimgui.KeyShiftTab
 			}
 			in.Keys = append(in.Keys, code)
 		}
@@ -67,13 +67,13 @@ func (g *game) Update() error {
 	if !g.paused {
 		g.phase += g.speed / float64(ebiten.TPS())
 	}
-	theme := ntui.HUDTheme()
+	theme := ntimgui.HUDTheme()
 	if g.light {
-		theme = ntui.LightTheme()
+		theme = ntimgui.LightTheme()
 	}
 	g.ui.Theme = theme
 	g.ui.BeginFrame()
-	if g.ui.BeginPanel("Ebitengine + ntui", ntui.Rect{X: 2, Y: 2, W: 34, H: 15}) {
+	if g.ui.BeginPanel("Ebitengine + ntimgui", ntimgui.Rect{X: 2, Y: 2, W: 34, H: 15}) {
 		g.ui.Label("Drag this panel by its title")
 		g.ui.SliderFloat("Speed", &g.speed, .2, 3, "%.1fx")
 		g.ui.Checkbox("Pause animation", &g.paused)
@@ -103,7 +103,7 @@ func (g *game) Update() error {
 func (g *game) Draw(screen *ebiten.Image) {
 	// Font and renderer resources are created and reused on the callback side.
 	if g.backend == nil {
-		g.backend = ntuiebiten.New()
+		g.backend = ntimguiebiten.New()
 	}
 	screen.Fill(color.RGBA{R: 18, G: 24, B: 38, A: 255})
 	w, h := float64(g.width), float64(g.height)
@@ -113,7 +113,7 @@ func (g *game) Draw(screen *ebiten.Image) {
 		y := h*.53 + math.Sin(angle)*h*.31
 		vector.FillCircle(screen, float32(x), float32(y), float32(18+i*6), color.NRGBA{R: uint8(75 + i*25), G: 160, B: 235, A: 180}, true)
 	}
-	g.backend.Render(screen, g.commands, ntuiebiten.RenderOptions{
+	g.backend.Render(screen, g.commands, ntimguiebiten.RenderOptions{
 		ScaleX: w / columns, ScaleY: h / rows,
 	})
 }
@@ -127,8 +127,8 @@ func main() {
 	ebiten.SetWindowSize(800, 600)
 	ebiten.SetWindowSizeLimits(640, 480, -1, -1)
 	ebiten.SetWindowResizingMode(ebiten.WindowResizingModeEnabled)
-	ebiten.SetWindowTitle("ntui — standalone Ebitengine")
-	g := &game{ui: ntui.New(ntui.WithScreenSize(columns, rows)), width: 800, height: 600, speed: 1}
+	ebiten.SetWindowTitle("ntimgui — standalone Ebitengine")
+	g := &game{ui: ntimgui.New(ntimgui.WithScreenSize(columns, rows)), width: 800, height: 600, speed: 1}
 	if err := ebiten.RunGame(g); err != nil {
 		log.Fatal(err)
 	}

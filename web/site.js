@@ -25,7 +25,7 @@ const title = tabPreset ? tabPreset.title : demos[demo];
 
 const status = document.querySelector('#status');
 document.querySelector('#title').textContent = title;
-document.title = `${title} · ntui`;
+document.title = `${title} · ntimgui`;
 const restart = new URL(location.href);
 restart.searchParams.set('demo', demo);
 if (tabPreset) {
@@ -34,7 +34,7 @@ if (tabPreset) {
   restart.searchParams.delete('tab');
 }
 document.querySelector('#restart').href = restart.href;
-document.querySelector('#source').href = `https://github.com/NimbleTerminal/ntui/tree/main/examples/${demo}`;
+document.querySelector('#source').href = `https://github.com/NimbleTerminal/ntimgui/tree/main/examples/${demo}`;
 for (const link of document.querySelectorAll('[data-demo]')) {
   if (link.dataset.demo === navKey) link.setAttribute('aria-current', 'page');
 }

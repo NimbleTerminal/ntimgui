@@ -1,4 +1,4 @@
-package ntui
+package ntimgui
 
 import "testing"
 

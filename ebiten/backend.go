@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Neomantra Corp.
 
-package ntuiebiten
+package ntimguiebiten
 
 import (
 	"bytes"
@@ -12,8 +12,8 @@ import (
 	"github.com/hajimehoshi/ebiten/v2/vector"
 	"golang.org/x/image/font/gofont/gomono"
 	"golang.org/x/image/font/gofont/gomonobold"
-	"nimbleterminal.dev/ntui"
-	"nimbleterminal.dev/ntui/ebiten/internal/geometry"
+	"nimbleterminal.dev/ntimgui"
+	"nimbleterminal.dev/ntimgui/ebiten/internal/geometry"
 )
 
 // Option configures a Backend.
@@ -81,9 +81,9 @@ func (b *Backend) Dispose() {
 }
 
 // Render alpha-composites commands in their supplied order without clearing dst.
-// Use DrawList.Snapshot or ntui.SnapshotCommands before crossing goroutines;
+// Use DrawList.Snapshot or ntimgui.SnapshotCommands before crossing goroutines;
 // callers must not mutate commands or referenced Values during rendering.
-func (b *Backend) Render(dst *ebiten.Image, commands []ntui.DrawCmd, opts RenderOptions) {
+func (b *Backend) Render(dst *ebiten.Image, commands []ntimgui.DrawCmd, opts RenderOptions) {
 	if b.disposed || dst == nil {
 		return
 	}
@@ -118,28 +118,28 @@ func (b *Backend) Render(dst *ebiten.Image, commands []ntui.DrawCmd, opts Render
 			style.FG.A = uint8(uint16(style.FG.A) * 2 / 3)
 		}
 		switch cmd.Kind {
-		case ntui.CmdRect:
+		case ntimgui.CmdRect:
 			fill(target, r, style.BG)
-		case ntui.CmdBox:
+		case ntimgui.CmdBox:
 			b.box(target, r, cmd, style, opts)
-		case ntui.CmdText:
+		case ntimgui.CmdText:
 			b.drawText(target, r, cmd.Text, cmd.Align, style)
-		case ntui.CmdLine:
+		case ntimgui.CmdLine:
 			col := fallback(style.Border, style.FG)
 			if r.Dx() >= r.Dy() {
 				fill(target, rect(r.Min.X, r.Min.Y+r.Dy()/2, r.Max.X, r.Min.Y+r.Dy()/2+1), col)
 			} else {
 				fill(target, rect(r.Min.X+r.Dx()/2, r.Min.Y, r.Min.X+r.Dx()/2+1, r.Max.Y), col)
 			}
-		case ntui.CmdGauge:
+		case ntimgui.CmdGauge:
 			b.gauge(target, r, cmd, style, opts)
-		case ntui.CmdSparkline:
+		case ntimgui.CmdSparkline:
 			b.plot(target, r, cmd, style, opts)
 		}
 	}
 }
 
-func fallback(c, other ntui.RGBA) ntui.RGBA {
+func fallback(c, other ntimgui.RGBA) ntimgui.RGBA {
 	if c.IsZero() {
 		return other
 	}
@@ -151,7 +151,7 @@ func unit(v float64) float64 {
 	}
 	return math.Max(0, math.Min(1, v))
 }
-func fill(dst *ebiten.Image, r image.Rectangle, c ntui.RGBA) {
+func fill(dst *ebiten.Image, r image.Rectangle, c ntimgui.RGBA) {
 	if r.Empty() || c.A == 0 {
 		return
 	}
@@ -160,7 +160,7 @@ func fill(dst *ebiten.Image, r image.Rectangle, c ntui.RGBA) {
 
 // Disjoint strips avoid double-blending translucent corners. Rounded follows
 // RasterBackend's one-pixel corner cut; Double and Thick both use two pixels.
-func border(dst *ebiten.Image, r image.Rectangle, width int, rounded bool, c ntui.RGBA) {
+func border(dst *ebiten.Image, r image.Rectangle, width int, rounded bool, c ntimgui.RGBA) {
 	for n := 0; n < width; n++ {
 		q := r.Inset(n)
 		if q.Dx() < 2 || q.Dy() < 2 {
@@ -183,7 +183,7 @@ func inset(r image.Rectangle) image.Rectangle {
 	}
 	return q
 }
-func (b *Backend) box(dst *ebiten.Image, r image.Rectangle, cmd ntui.DrawCmd, s ntui.WidgetStyle, o RenderOptions) {
+func (b *Backend) box(dst *ebiten.Image, r image.Rectangle, cmd ntimgui.DrawCmd, s ntimgui.WidgetStyle, o RenderOptions) {
 	fill(dst, r, s.BG)
 	if cmd.Text != "" {
 		header := r
@@ -194,17 +194,17 @@ func (b *Backend) box(dst *ebiten.Image, r image.Rectangle, cmd ntui.DrawCmd, s 
 		pad := int(math.Round(o.ScaleX))
 		header.Min.X += pad
 		header.Max.X -= pad
-		b.drawText(dst, header, cmd.Text, ntui.AlignLeft, s)
+		b.drawText(dst, header, cmd.Text, ntimgui.AlignLeft, s)
 	}
-	if cmd.Border != ntui.BorderNone {
+	if cmd.Border != ntimgui.BorderNone {
 		w := 1
-		if cmd.Border == ntui.BorderThick || cmd.Border == ntui.BorderDouble {
+		if cmd.Border == ntimgui.BorderThick || cmd.Border == ntimgui.BorderDouble {
 			w = 2
 		}
-		border(dst, r, w, cmd.Border == ntui.BorderRounded, fallback(s.Border, s.FG))
+		border(dst, r, w, cmd.Border == ntimgui.BorderRounded, fallback(s.Border, s.FG))
 	}
 }
-func (b *Backend) gauge(dst *ebiten.Image, r image.Rectangle, cmd ntui.DrawCmd, s ntui.WidgetStyle, o RenderOptions) {
+func (b *Backend) gauge(dst *ebiten.Image, r image.Rectangle, cmd ntimgui.DrawCmd, s ntimgui.WidgetStyle, o RenderOptions) {
 	track := inset(r)
 	fraction := unit(cmd.Fraction)
 	fill(dst, track, s.BG)
@@ -217,9 +217,9 @@ func (b *Backend) gauge(dst *ebiten.Image, r image.Rectangle, cmd ntui.DrawCmd, 
 		x := track.Min.X + int(math.Round(fraction*float64(max(0, track.Dx()-1))))
 		fill(dst, rect(x-w/2, r.Min.Y+1, x+w/2+1, r.Max.Y-1), s.FG)
 	}
-	b.drawText(dst, r, cmd.Text, ntui.AlignCenter, s)
+	b.drawText(dst, r, cmd.Text, ntimgui.AlignCenter, s)
 }
-func (b *Backend) plot(dst *ebiten.Image, r image.Rectangle, cmd ntui.DrawCmd, s ntui.WidgetStyle, o RenderOptions) {
+func (b *Backend) plot(dst *ebiten.Image, r image.Rectangle, cmd ntimgui.DrawCmd, s ntimgui.WidgetStyle, o RenderOptions) {
 	if len(cmd.Values) == 0 {
 		return
 	}
@@ -264,7 +264,7 @@ func (b *Backend) plot(dst *ebiten.Image, r image.Rectangle, cmd ntui.DrawCmd, s
 	border(dst, p, 1, true, fallback(s.Border, s.FG))
 	if cmd.Text != "" {
 		header := rect(p.Min.X+4, p.Min.Y+1, p.Max.X-4, min(p.Max.Y, p.Min.Y+int(math.Round(o.ScaleY))))
-		b.drawText(dst, header, cmd.Text, ntui.AlignRight, s)
+		b.drawText(dst, header, cmd.Text, ntimgui.AlignRight, s)
 	}
 }
 

@@ -1,14 +1,14 @@
-# `ntui` Developer Guide: Binding & Widget Reference
+# `ntimgui` Developer Guide: Binding & Widget Reference
 
-Because `ntui` is an **Immediate-Mode GUI (IMGUI)**, there are **no widget objects to retain**, **no `OnClick` / `OnChange` callbacks to register**, and **no two-way data synchronization glue**.
+Because `ntimgui` is an **Immediate-Mode GUI (IMGUI)**, there are **no widget objects to retain**, **no `OnClick` / `OnChange` callbacks to register**, and **no two-way data synchronization glue**.
 
-Your Go struct fields *are* the source of truth. Every frame inside your `Update` (or UI builder) method, you pass pointers to your state directly into `ntui` widget calls and branch on their `bool` return values using standard Go `if` statements.
+Your Go struct fields *are* the source of truth. Every frame inside your `Update` (or UI builder) method, you pass pointers to your state directly into `ntimgui` widget calls and branch on their `bool` return values using standard Go `if` statements.
 
 ---
 
 ## 1. The Three Binding Patterns
 
-Every interactive control in `ntui` uses one of three immediate-mode patterns:
+Every interactive control in `ntimgui` uses one of three immediate-mode patterns:
 
 ### A. Action Trigger (`bool` return)
 Push buttons (`Button`, `ButtonSized`) and raw radio buttons (`RadioButton`) return `true` **only on the frame the user activates them** (mouse click-and-release or `Enter`/`Space` when focused):
@@ -21,10 +21,10 @@ if ui.Button("Reset Camera") {
 ```
 
 ### B. Pointer Mutation + Change Notification (`*T` pointer + `bool` return)
-Stateful controls (`Checkbox`, `Toggle`, `RadioButtonInt`, `SliderFloat`, `SliderInt`, `TextInput`, `Combo`, `ListBox`, `TabBar`, `ColorEdit`) take a **pointer to your Go variable** (`*bool`, `*int`, `*float64`, `*string`, `*ntui.RGBA`).
+Stateful controls (`Checkbox`, `Toggle`, `RadioButtonInt`, `SliderFloat`, `SliderInt`, `TextInput`, `Combo`, `ListBox`, `TabBar`, `ColorEdit`) take a **pointer to your Go variable** (`*bool`, `*int`, `*float64`, `*string`, `*ntimgui.RGBA`).
 
 1. They read the current value from your pointer to render the control.
-2. If the user interacts with the control on this frame, `ntui` mutates your variable **in place** and returns `true` so you can run side effects (like rebuilding a mesh or logging an event):
+2. If the user interacts with the control on this frame, `ntimgui` mutates your variable **in place** and returns `true` so you can run side effects (like rebuilding a mesh or logging an event):
 
 ```go
 // 1. Simple binding (mutates m.wireframe automatically when clicked):
@@ -40,7 +40,7 @@ if ui.SliderFloat("FOV", &m.fov, 30.0, 120.0, "%.0f°") {
 Containers (`BeginPanel`, `CollapsingHeader`, `TreeNode`) return `true` when open/expanded. Because your UI is just Go code executing top-to-bottom, hiding or collapsing widgets is a normal `if` block—collapsed widgets aren't even evaluated:
 
 ```go
-if ui.BeginPanel("Inspector", ntui.NewRect(2, 1, 36, 18)) {
+if ui.BeginPanel("Inspector", ntimgui.NewRect(2, 1, 36, 18)) {
     if ui.CollapsingHeader("Transform", true) {
         ui.SliderFloat("Scale", &m.scale, 0.1, 5.0, "%.2fx")
     }
@@ -127,10 +127,10 @@ if ui.ListBox("Scene Mesh", &m.selectedMesh, meshes, 6) {
 
 ### Color Picker (`ColorEdit`)
 
-Binds directly to an `*ntui.RGBA` struct and renders a live color swatch, hex readout (`#RRGGBB`), and `R`/`G`/`B` sliders:
+Binds directly to an `*ntimgui.RGBA` struct and renders a live color swatch, hex readout (`#RRGGBB`), and `R`/`G`/`B` sliders:
 
 ```go
-var lightColor = ntui.RGB(88, 166, 255)
+var lightColor = ntimgui.RGB(88, 166, 255)
 
 if ui.ColorEdit("Key Light", &m.lightColor) {
     m.scene.SetLightColor(m.lightColor)
@@ -187,7 +187,7 @@ ui.Tooltip("Recomputes bounding volume hierarchy for ray picking")
 
 ## 3. Widget Identity & Loops (`##`, `###`, `PushID`)
 
-`ntui` tracks hover (`Hot`), click/drag (`Active`), and keyboard focus (`Focus`) by hashing each widget's label string into a 64-bit FNV-1a [`ntui.ID`](id.go).
+`ntimgui` tracks hover (`Hot`), click/drag (`Active`), and keyboard focus (`Focus`) by hashing each widget's label string into a 64-bit FNV-1a [`ntimgui.ID`](id.go).
 
 If you create multiple widgets with the **same visible label**, disambiguate their IDs using one of three mechanisms:
 
@@ -200,11 +200,11 @@ ui.Button("Reset##lights") // Displays "Reset", hashes "Reset##lights"
 ```
 
 ### 2. `Dynamic Text###stable_id`
-When a button or panel's visible label changes dynamically (e.g. a live FPS counter in a panel title), `###` tells `ntui` to hash **only** the suffix after `###` so dragging/focus doesn't break when the text updates:
+When a button or panel's visible label changes dynamically (e.g. a live FPS counter in a panel title), `###` tells `ntimgui` to hash **only** the suffix after `###` so dragging/focus doesn't break when the text updates:
 
 ```go
 title := fmt.Sprintf("Telemetry (%.1f FPS)###telemetry_panel", m.fps)
-if ui.BeginPanel(title, ntui.NewRect(2, 1, 36, 14)) {
+if ui.BeginPanel(title, ntimgui.NewRect(2, 1, 36, 14)) {
     // ...
 }
 ui.EndPanel()
@@ -254,14 +254,14 @@ ui.Separator()
 
 ## 5. Preventing Input Bleed into 3D Viewports (`nt3d`)
 
-When overlaying floating `ntui` panels on top of an interactive 3D viewport (`nt3dwidget`) or custom canvas, check `WantCaptureMouse()` and `WantCaptureKeyboard()` after `EndFrame()` so dragging a slider or typing in a `TextInput` doesn't orbit the 3D camera or trigger global hotkeys:
+When overlaying floating `ntimgui` panels on top of an interactive 3D viewport (`nt3dwidget`) or custom canvas, check `WantCaptureMouse()` and `WantCaptureKeyboard()` after `EndFrame()` so dragging a slider or typing in a `TextInput` doesn't orbit the 3D camera or trigger global hotkeys:
 
 ```go
-// 1. Let ntui process the Bubble Tea message and evaluate widgets first:
+// 1. Let ntimgui process the Bubble Tea message and evaluate widgets first:
 m.ui.ProcessInput(msg)
 m.buildUI() // calls BeginFrame() ... widgets ... EndFrame()
 
-// 2. Only forward mouse/keyboard events to the 3D scene if ntui didn't capture them:
+// 2. Only forward mouse/keyboard events to the 3D scene if ntimgui didn't capture them:
 switch msg.(type) {
 case tea.MouseMsg:
     if !m.ui.WantCaptureMouse() {
@@ -280,24 +280,24 @@ case tea.KeyPressMsg:
 
 The same `ui.DrawList` generated between `BeginFrame()` and `EndFrame()` can be rendered by any backend (or switched at runtime):
 
-1. **Glyph Backend (`ntui.GlyphBackend`)**:
+1. **Glyph Backend (`ntimgui.GlyphBackend`)**:
    - Renders into an `ntcanvas.GraphemeGrid` using crisp Unicode box drawing (`╭─╮│╰─╯`), eighth-block sliders (`█▉▊▋▌▍▎▏`), and sparklines (`▁▂▃▄▅▆▇█`).
    - Can render standalone (`glyph.RenderToString(ui.DrawList)`) or composite non-empty cells over an existing Bubble Tea view string (`glyph.OverlayString(baseView, ui.DrawList)`).
-2. **Raster Backend (`ntui.RasterBackend`)**:
+2. **Raster Backend (`ntimgui.RasterBackend`)**:
    - Scales cell coordinates by `(CellPixelWidth, CellPixelHeight)` and alpha-blends translucent HUD panels, pixel sliders, and `basicfont` text directly onto an `*image.RGBA` buffer (`raster.RenderToImage(rgbaImg, ui.DrawList)`).
    - Ideal for compositing a HUD directly onto an `nt3d` framebuffer before presenting via `ntpicture` (Kitty / Sixel / iTerm2 graphics protocols).
 
 
 ## 7. Ebitengine overlays and snapshot ownership
 
-Import `ntuiebiten "nimbleterminal.dev/ntui/ebiten"` from your GPU integration,
-not from ntui widget code. Use the same backend with a normal Ebitengine game or
+Import `ntimguiebiten "nimbleterminal.dev/ntimgui/ebiten"` from your GPU integration,
+not from ntimgui widget code. Use the same backend with a normal Ebitengine game or
 with `ntebitengine.DrawFunc`. Create it once on the callback side and reuse it:
 
 ```go
 // Ebitengine callback goroutine:
-backend := ntuiebiten.New() // bundled Go Mono; defaults to 9x18 pixels per cell
-backend.Render(dst, commands, ntuiebiten.RenderOptions{
+backend := ntimguiebiten.New() // bundled Go Mono; defaults to 9x18 pixels per cell
+backend.Render(dst, commands, ntimguiebiten.RenderOptions{
     ScaleX: 9.5, ScaleY: 17.25,
     OffsetX: 20, OffsetY: 10, // pixels relative to dst.Bounds().Min
 })
@@ -314,7 +314,7 @@ the bundled default automatically follows the cell scale. See the package docs
 for supported style attributes and deliberate raster-backend differences.
 
 `DrawList.Commands()` copies structs but shares `Values` slices. For a cross-loop
-handoff, use `DrawList.Snapshot()` or `ntui.SnapshotCommands(commands)`. They copy
+handoff, use `DrawList.Snapshot()` or `ntimgui.SnapshotCommands(commands)`. They copy
 mutable slices and share immutable strings. Source resets, the next `BeginFrame`,
 and source mutations cannot affect the copy. The returned slice is **read-only by
 contract** after publication, including its nested `Values`; do not recycle it
@@ -322,7 +322,7 @@ while another goroutine might still hold it.
 
 ```go
 type frame struct {
-    Commands []ntui.DrawCmd
+    Commands []ntimgui.DrawCmd
     Phase float64
 }
 var latest atomic.Value // initialize before starting either loop
@@ -335,7 +335,7 @@ latest.Store(frame{Commands: ui.DrawList.Snapshot(), Phase: phase})
 // Ebitengine callback; backend was created on this side:
 f := latest.Load().(frame) // load once, for both scene and overlay
 drawScene(dst, f.Phase)
-backend.Render(dst, f.Commands, ntuiebiten.RenderOptions{
+backend.Render(dst, f.Commands, ntimguiebiten.RenderOptions{
     ScaleX: float64(geo.Pixels.X) / float64(geo.Cells.X),
     ScaleY: float64(geo.Pixels.Y) / float64(geo.Cells.Y),
 })
@@ -360,7 +360,7 @@ the picture. At larger scales it uses draggable translucent GPU panels.
 
 CPU-only validation (no display): `go test . ./ebiten/internal/geometry`.
 Real graphics validation: `go test -tags integration ./ebiten` with a working
-desktop graphics environment. Set `NTUI_TEST_IMAGE=/tmp/ntui.png` to export a
+desktop graphics environment. Set `NTUI_TEST_IMAGE=/tmp/ntimgui.png` to export a
 light/dark rendering contact sheet. GPU tests use readback only for assertions;
 the backend itself never reads pixels. Font redistribution terms are in
 [ebiten/FONT-LICENSE.txt](ebiten/FONT-LICENSE.txt).

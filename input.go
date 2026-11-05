@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Neomantra Corp.
 
-package ntui
+package ntimgui
 
 import (
 	tea "charm.land/bubbletea/v2"

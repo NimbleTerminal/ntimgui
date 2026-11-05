@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Neomantra Corp.
 
-// Package ntui implements a pure-Go immediate-mode GUI (IMGUI) library for the
+// Package ntimgui implements a pure-Go immediate-mode GUI (IMGUI) library for the
 // NimbleTerminal ecosystem (Bubble Tea v2, ntcanvas, ntpicture, ntgpuimage, and nt3d).
 //
 // In immediate mode, user interfaces are declared inline during execution flow
@@ -17,4 +17,4 @@
 //   - [RasterBackend]: renders pixel-accurate boxes, gauges, and typography
 //     into [*image.RGBA] buffers or alpha-blends HUD overlays directly onto
 //     3D/GPU frames.
-package ntui
+package ntimgui

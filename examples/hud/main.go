@@ -15,9 +15,9 @@ import (
 	"charm.land/bubbles/v2/key"
 	tea "charm.land/bubbletea/v2"
 	"nimbleterminal.dev/ntcanvas"
+	"nimbleterminal.dev/ntimgui"
+	"nimbleterminal.dev/ntimgui/examples/internal/demohelp"
 	picture "nimbleterminal.dev/ntpicture"
-	"nimbleterminal.dev/ntui"
-	"nimbleterminal.dev/ntui/examples/internal/demohelp"
 )
 
 type tickMsg time.Time
@@ -31,14 +31,14 @@ func tickCmd() tea.Cmd {
 type vec3 struct{ x, y, z float64 }
 type edge3 struct {
 	a, b vec3
-	col  ntui.RGBA
+	col  ntimgui.RGBA
 }
 
 type demoModel struct {
 	session *picture.TerminalSession
-	ui      *ntui.Context
-	glyph   *ntui.GlyphBackend
-	raster  *ntui.RasterBackend
+	ui      *ntimgui.Context
+	glyph   *ntimgui.GlyphBackend
+	raster  *ntimgui.RasterBackend
 	pic     *picture.Picture
 
 	width, height int
@@ -88,9 +88,9 @@ func newDemoModel() *demoModel {
 
 	m := &demoModel{
 		session:    session,
-		ui:         ntui.New(ntui.WithScreenSize(80, 24), ntui.WithTheme(ntui.HUDTheme())),
-		glyph:      ntui.NewGlyphBackend(80, 24),
-		raster:     ntui.NewRasterBackend(9, 18),
+		ui:         ntimgui.New(ntimgui.WithScreenSize(80, 24), ntimgui.WithTheme(ntimgui.HUDTheme())),
+		glyph:      ntimgui.NewGlyphBackend(80, 24),
+		raster:     ntimgui.NewRasterBackend(9, 18),
 		pic:        pic,
 		width:      80,
 		height:     24,
@@ -103,7 +103,7 @@ func newDemoModel() *demoModel {
 		shape:      0,
 		autoRotate: true,
 		showAxes:   true,
-		objectTag:  "ntui-torus",
+		objectTag:  "ntimgui-torus",
 		dirty:      true,
 		geometry:   pic.RasterGeometry(),
 	}
@@ -119,7 +119,7 @@ func (m *demoModel) buildFrame() {
 	m.ui.BeginFrame()
 
 	// Floating Control Panel on the left
-	if m.ui.BeginPanel("nt3d + ntui Controls", ntui.NewRect(2, 1, 34, 21)) {
+	if m.ui.BeginPanel("nt3d + ntimgui Controls", ntimgui.NewRect(2, 1, 34, 21)) {
 		m.ui.Text("Object: %s (Pulses: %d)", m.objectTag, m.pulses)
 		m.ui.TextInput("Tag", &m.objectTag, 16)
 		m.ui.Separator()
@@ -167,7 +167,7 @@ func (m *demoModel) buildFrame() {
 
 	// Floating Telemetry Panel on the top-right
 	teleX := max(38, m.width-34)
-	if m.ui.BeginPanel("IMGUI Telemetry", ntui.NewRect(teleX, 1, 32, 10)) {
+	if m.ui.BeginPanel("IMGUI Telemetry", ntimgui.NewRect(teleX, 1, 32, 10)) {
 		m.ui.Text("Mouse Cell: (%d, %d)", m.ui.Input.MouseX, m.ui.Input.MouseY)
 		m.ui.Text("Capture Mouse: %v", m.ui.WantCaptureMouse())
 		m.ui.Text("Capture Keys:  %v", m.ui.WantCaptureKeyboard())
@@ -337,7 +337,7 @@ func (m *demoModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 	}
 
-	// If ntui did NOT capture the mouse, allow dragging the background to orbit the 3D camera!
+	// If ntimgui did NOT capture the mouse, allow dragging the background to orbit the 3D camera!
 	switch ev := msg.(type) {
 	case tea.MouseClickMsg:
 		mouse := ev.Mouse()
@@ -402,13 +402,13 @@ func (m *demoModel) sceneEdges() []edge3 {
 			}
 		}
 		for i := 0; i < rings; i++ {
-			col := ntui.RGB(uint8(90+(i*140)/rings), 185, 255)
+			col := ntimgui.RGB(uint8(90+(i*140)/rings), 185, 255)
 			for j := 0; j < sides; j++ {
 				p0 := pt(i, j)
 				p1 := pt(i+1, j)
 				p2 := pt(i, j+1)
 				edges = append(edges, edge3{a: p0, b: p1, col: col})
-				edges = append(edges, edge3{a: p0, b: p2, col: ntui.RGB(70, 210, 190)})
+				edges = append(edges, edge3{a: p0, b: p2, col: ntimgui.RGB(70, 210, 190)})
 			}
 		}
 	case 1: // Geodesic Sphere
@@ -427,9 +427,9 @@ func (m *demoModel) sceneEdges() []edge3 {
 			for j := 0; j < lonSteps; j++ {
 				p0 := pt(i, j)
 				if i < latSteps {
-					edges = append(edges, edge3{a: p0, b: pt(i+1, j), col: ntui.RGB(110, 190, 255)})
+					edges = append(edges, edge3{a: p0, b: pt(i+1, j), col: ntimgui.RGB(110, 190, 255)})
 				}
-				edges = append(edges, edge3{a: p0, b: pt(i, j+1), col: ntui.RGB(160, 130, 255)})
+				edges = append(edges, edge3{a: p0, b: pt(i, j+1), col: ntimgui.RGB(160, 130, 255)})
 			}
 		}
 	default: // Cube
@@ -444,15 +444,15 @@ func (m *demoModel) sceneEdges() []edge3 {
 			{0, 4}, {1, 5}, {2, 6}, {3, 7},
 		}
 		for _, p := range pairs {
-			edges = append(edges, edge3{a: verts[p[0]], b: verts[p[1]], col: ntui.RGB(100, 220, 255)})
+			edges = append(edges, edge3{a: verts[p[0]], b: verts[p[1]], col: ntimgui.RGB(100, 220, 255)})
 		}
 	}
 
 	if m.showAxes {
 		edges = append(edges,
-			edge3{a: vec3{0, 0, 0}, b: vec3{1.7, 0, 0}, col: ntui.RGB(255, 95, 95)},
-			edge3{a: vec3{0, 0, 0}, b: vec3{0, 1.7, 0}, col: ntui.RGB(95, 240, 130)},
-			edge3{a: vec3{0, 0, 0}, b: vec3{0, 0, 1.7}, col: ntui.RGB(95, 160, 255)},
+			edge3{a: vec3{0, 0, 0}, b: vec3{1.7, 0, 0}, col: ntimgui.RGB(255, 95, 95)},
+			edge3{a: vec3{0, 0, 0}, b: vec3{0, 1.7, 0}, col: ntimgui.RGB(95, 240, 130)},
+			edge3{a: vec3{0, 0, 0}, b: vec3{0, 0, 1.7}, col: ntimgui.RGB(95, 160, 255)},
 		)
 	}
 	return edges
@@ -573,7 +573,7 @@ func (m *demoModel) renderRasterFrameFor(g picture.RasterGeometry) *image.RGBA {
 		}
 	}
 
-	// Composite the ntui DrawList directly on top of the 3D pixel buffer!
+	// Composite the ntimgui DrawList directly on top of the 3D pixel buffer!
 	m.raster.RenderOver(img, m.ui.DrawList)
 	return img
 }
@@ -585,7 +585,7 @@ func (m *demoModel) View() tea.View {
 	} else {
 		grid := m.glyph.Grid()
 		m.renderGlyphScene(grid)
-		ntui.RenderToGraphemeGrid(grid, m.ui.DrawList)
+		ntimgui.RenderToGraphemeGrid(grid, m.ui.DrawList)
 		content = grid.Render(grid.Bounds())
 	}
 	v := tea.NewView(content)

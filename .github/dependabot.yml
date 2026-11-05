@@ -17,4 +17,4 @@ updates:
       interval: weekly
     ignore:
       # Examples intentionally use the library from this checkout.
-      - dependency-name: nimbleterminal.dev/ntui
+      - dependency-name: nimbleterminal.dev/ntimgui

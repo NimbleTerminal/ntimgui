@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Neomantra Corp.
 
-// Package demohelp connects ntui example help keys to native and browser booba controls.
+// Package demohelp connects ntimgui example help keys to native and browser booba controls.
 package demohelp
 
 import (
@@ -14,7 +14,7 @@ import (
 	"github.com/NimbleMarkets/go-booba/actions/bubblehelp"
 )
 
-// Demo is implemented by interactive ntui examples hosted via go-booba.
+// Demo is implemented by interactive ntimgui examples hosted via go-booba.
 type Demo interface {
 	tea.Model
 	Help() []key.Binding
@@ -41,9 +41,9 @@ func Run(m Demo) error {
 	wrapped, err := bubblehelp.NewModel(m, func(inner tea.Model) bubblehelp.Description {
 		d := inner.(Demo)
 		return bubblehelp.Description{
-			Context: "ntui-demo",
+			Context: "ntimgui-demo",
 			Keys:    helpKeys(d.Help()),
-			Status:  actions.ProgramStatus{App: "ntui", Summary: d.Summary()},
+			Status:  actions.ProgramStatus{App: "ntimgui", Summary: d.Summary()},
 		}
 	}, bubblehelp.ModelOptions{
 		Adapter: bubblehelp.Options{

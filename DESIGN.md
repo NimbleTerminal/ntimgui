@@ -1,17 +1,17 @@
-# `ntui` Design Prompt & Technical Specification
+# `ntimgui` Design Prompt & Technical Specification
 
-> **Origin**: Synthesized from *Terminal IMGUI in Go* (`nimbleterminal.dev/ntui`) for the NimbleTerminal ecosystem (`ntcanvas`, `ntpicture`, `ntgpuimage`, `nt3d`, and Bubble Tea v2).
+> **Origin**: Synthesized from *Terminal IMGUI in Go* (`nimbleterminal.dev/ntimgui`) for the NimbleTerminal ecosystem (`ntcanvas`, `ntpicture`, `ntgpuimage`, `nt3d`, and Bubble Tea v2).
 
 ---
 
 ## Part 1: Design Prompt
 
 ### Background & Context
-We are designing **`ntui`** (`nimbleterminal.dev/ntui`), a lightweight, pure-Go immediate-mode GUI (IMGUI) library inspired by Dear ImGui and designed to layer seamlessly over the NimbleTerminal ecosystem:
+We are designing **`ntimgui`** (`nimbleterminal.dev/ntimgui`), a lightweight, pure-Go immediate-mode GUI (IMGUI) library inspired by Dear ImGui and designed to layer seamlessly over the NimbleTerminal ecosystem:
 - **`charm.land/bubbletea/v2`**: Event-driven terminal application lifecycle (`Update` / `View`).
 - **`nimbleterminal.dev/ntcanvas`**: Terminal cell grids (`RuneGrid`, `StyledRuneGrid`, `GraphemeGrid`) and viewport models.
 - **`nimbleterminal.dev/ntpicture` & `nimbleterminal.dev/ntgpuimage`**: Pixel/raster terminal graphics (Kitty graphics protocol, shared memory transport, glyph fallback, and offscreen WebGPU readback).
-- **`nimbleterminal.dev/nt3d`**: 3D scene engine and Bubble Tea widget where `ntui` provides HUD overlays, control panels, and tool palettes without the overhead of managing a retained widget object tree.
+- **`nimbleterminal.dev/nt3d`**: 3D scene engine and Bubble Tea widget where `ntimgui` provides HUD overlays, control panels, and tool palettes without the overhead of managing a retained widget object tree.
 
 ### Hard Constraints
 1. **Pure Go (Zero CGo)**: Must compile cleanly for native targets and browser WebAssembly (`GOOS=js GOARCH=wasm`).
@@ -43,8 +43,8 @@ We are designing **`ntui`** (`nimbleterminal.dev/ntui`), a lightweight, pure-Go 
 
 ### 1. Module & Package Architecture
 
-- **Module Path**: `nimbleterminal.dev/ntui`
-- **Package Name**: `ntui`
+- **Module Path**: `nimbleterminal.dev/ntimgui`
+- **Package Name**: `ntimgui`
 - **Go Version**: Go 1.26+ (`CGO_ENABLED=0` compatible, native + `js/wasm`)
 
 | File | Responsibility |
@@ -89,7 +89,7 @@ func (m *appModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
     m.ui.ProcessInput(msg)
 
     m.ui.BeginFrame()
-    if m.ui.BeginPanel("3D Controls", ntui.Rect{X: 2, Y: 1, W: 28, H: 12}) {
+    if m.ui.BeginPanel("3D Controls", ntimgui.Rect{X: 2, Y: 1, W: 28, H: 12}) {
         if m.ui.Button("Toggle Wireframe") {
             m.engine.ToggleWireframe()
         }
@@ -99,7 +99,7 @@ func (m *appModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
     m.ui.EndPanel()
     m.ui.EndFrame()
 
-    // Only forward mouse events to the 3D viewport if ntui didn't capture them
+    // Only forward mouse events to the 3D viewport if ntimgui didn't capture them
     if _, isMouse := msg.(tea.MouseMsg); !isMouse || !m.ui.WantCaptureMouse() {
         m.viewport, cmd = m.viewport.Update(msg)
     }

@@ -58,7 +58,7 @@ tasks:
     cmds:
       - mkdir -p bin
       - for: [catalog, dashboard, hud, ebiten]
-        cmd: go -C examples build -mod=readonly -o ../bin/ntui-{{.ITEM}} ./{{.ITEM}}
+        cmd: go -C examples build -mod=readonly -o ../bin/ntimgui-{{.ITEM}} ./{{.ITEM}}
   run-ebiten:
     desc: Run the standalone Ebitengine window example
     cmds: ['go -C examples run -mod=readonly ./ebiten']

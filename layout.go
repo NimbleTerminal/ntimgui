@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Neomantra Corp.
 
-package ntui
+package ntimgui
 
 // FlowDir controls how sequential widgets advance the layout cursor.
 type FlowDir uint8

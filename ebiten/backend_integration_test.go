@@ -1,6 +1,6 @@
 //go:build integration
 
-package ntuiebiten
+package ntimguiebiten
 
 import (
 	"bytes"
@@ -16,7 +16,7 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
 	"golang.org/x/image/font/gofont/goregular"
-	"nimbleterminal.dev/ntui"
+	"nimbleterminal.dev/ntimgui"
 )
 
 type gpuCall struct {
@@ -63,13 +63,13 @@ func pixels(img *ebiten.Image) *image.RGBA {
 	return out
 }
 
-var testStyle = ntui.WidgetStyle{FG: ntui.ColorRGBA(230, 240, 250, 190), BG: ntui.ColorRGBA(80, 120, 180, 110), Border: ntui.ColorRGBA(180, 220, 240, 200), Accent: ntui.ColorRGBA(240, 170, 50, 180)}
+var testStyle = ntimgui.WidgetStyle{FG: ntimgui.ColorRGBA(230, 240, 250, 190), BG: ntimgui.ColorRGBA(80, 120, 180, 110), Border: ntimgui.ColorRGBA(180, 220, 240, 200), Accent: ntimgui.ColorRGBA(240, 170, 50, 180)}
 
-func command(kind ntui.DrawCmdKind) ntui.DrawCmd {
-	return ntui.DrawCmd{Kind: kind, Bounds: ntui.Rect{X: 1, Y: 1, W: 15, H: 3}, Clip: ntui.Rect{W: 30, H: 10}, Style: testStyle, Border: ntui.BorderRounded, Text: "Hi ✓ ▾", Align: ntui.AlignRight, Fraction: .6, ShowThumb: true, Values: []float64{.1, .9, .4, .7, .2}}
+func command(kind ntimgui.DrawCmdKind) ntimgui.DrawCmd {
+	return ntimgui.DrawCmd{Kind: kind, Bounds: ntimgui.Rect{X: 1, Y: 1, W: 15, H: 3}, Clip: ntimgui.Rect{W: 30, H: 10}, Style: testStyle, Border: ntimgui.BorderRounded, Text: "Hi ✓ ▾", Align: ntimgui.AlignRight, Fraction: .6, ShowThumb: true, Values: []float64{.1, .9, .4, .7, .2}}
 }
 func TestAllCommandsClippingPreservesLayout(t *testing.T) {
-	for _, kind := range []ntui.DrawCmdKind{ntui.CmdRect, ntui.CmdBox, ntui.CmdText, ntui.CmdLine, ntui.CmdGauge, ntui.CmdSparkline} {
+	for _, kind := range []ntimgui.DrawCmdKind{ntimgui.CmdRect, ntimgui.CmdBox, ntimgui.CmdText, ntimgui.CmdLine, ntimgui.CmdGauge, ntimgui.CmdSparkline} {
 		for _, hist := range []bool{false, true} {
 			t.Run(fmt.Sprintf("%d/hist=%v", kind, hist), func(t *testing.T) {
 				var full, clipped *image.RGBA
@@ -83,9 +83,9 @@ func TestAllCommandsClippingPreservesLayout(t *testing.T) {
 					c := command(kind)
 					c.Histogram = hist
 					options := RenderOptions{ScaleX: 9.5, ScaleY: 17.25, OffsetX: 3.25, OffsetY: 2.5}
-					b.Render(a, []ntui.DrawCmd{c}, options)
-					c.Clip = ntui.Rect{X: 6, Y: 2, W: 6, H: 2}
-					b.Render(d, []ntui.DrawCmd{c}, options)
+					b.Render(a, []ntimgui.DrawCmd{c}, options)
+					c.Clip = ntimgui.Rect{X: 6, Y: 2, W: 6, H: 2}
+					b.Render(d, []ntimgui.DrawCmd{c}, options)
 					full, clipped = pixels(a), pixels(d)
 				})
 				// Absolute rounded cell edges for the clip, independently specified.
@@ -121,11 +121,11 @@ func TestFractionalTilingSubimageAndOrder(t *testing.T) {
 		dst := ebiten.NewImage(60, 60)
 		defer dst.Dispose()
 		sub := dst.SubImage(image.Rect(11, 13, 49, 48)).(*ebiten.Image)
-		var cmds []ntui.DrawCmd
+		var cmds []ntimgui.DrawCmd
 		for x := 0; x < 10; x++ {
-			cmds = append(cmds, ntui.DrawCmd{Kind: ntui.CmdRect, Bounds: ntui.Rect{X: x, W: 1, H: 4}, Clip: ntui.Rect{W: 10, H: 4}, Style: ntui.WidgetStyle{BG: ntui.RGB(255, 0, 0)}})
+			cmds = append(cmds, ntimgui.DrawCmd{Kind: ntimgui.CmdRect, Bounds: ntimgui.Rect{X: x, W: 1, H: 4}, Clip: ntimgui.Rect{W: 10, H: 4}, Style: ntimgui.WidgetStyle{BG: ntimgui.RGB(255, 0, 0)}})
 		}
-		cmds = append(cmds, ntui.DrawCmd{Kind: ntui.CmdRect, Layer: ntui.LayerBackground, Bounds: ntui.Rect{X: 4, W: 2, H: 4}, Clip: ntui.Rect{W: 10, H: 4}, Style: ntui.WidgetStyle{BG: ntui.RGB(0, 255, 0)}})
+		cmds = append(cmds, ntimgui.DrawCmd{Kind: ntimgui.CmdRect, Layer: ntimgui.LayerBackground, Bounds: ntimgui.Rect{X: 4, W: 2, H: 4}, Clip: ntimgui.Rect{W: 10, H: 4}, Style: ntimgui.WidgetStyle{BG: ntimgui.RGB(0, 255, 0)}})
 		b.Render(sub, cmds, RenderOptions{ScaleX: 2.5, ScaleY: 3.25, OffsetX: .5, OffsetY: 1.25})
 		got = pixels(dst)
 	})
@@ -155,15 +155,15 @@ func TestStraightAlphaPanelsAndGlyphEdges(t *testing.T) {
 			m := ebiten.NewImage(160, 60)
 			defer m.Dispose()
 			a.Fill(color.RGBA{background, background, background, 255})
-			c := ntui.DrawCmd{Kind: ntui.CmdRect, Bounds: ntui.Rect{W: 16, H: 1}, Clip: ntui.Rect{W: 16, H: 4}, Style: ntui.WidgetStyle{BG: ntui.ColorRGBA(200, 80, 30, 128)}}
-			b.Render(a, []ntui.DrawCmd{c}, RenderOptions{})
-			c.Kind = ntui.CmdText
+			c := ntimgui.DrawCmd{Kind: ntimgui.CmdRect, Bounds: ntimgui.Rect{W: 16, H: 1}, Clip: ntimgui.Rect{W: 16, H: 4}, Style: ntimgui.WidgetStyle{BG: ntimgui.ColorRGBA(200, 80, 30, 128)}}
+			b.Render(a, []ntimgui.DrawCmd{c}, RenderOptions{})
+			c.Kind = ntimgui.CmdText
 			c.Bounds.Y = 1
 			c.Text = "Aa ✓ ▾"
-			c.Style.FG = ntui.ColorRGBA(200, 80, 30, 128)
-			b.Render(a, []ntui.DrawCmd{c}, RenderOptions{})
-			c.Style.FG = ntui.RGB(255, 255, 255)
-			b.Render(m, []ntui.DrawCmd{c}, RenderOptions{})
+			c.Style.FG = ntimgui.ColorRGBA(200, 80, 30, 128)
+			b.Render(a, []ntimgui.DrawCmd{c}, RenderOptions{})
+			c.Style.FG = ntimgui.RGB(255, 255, 255)
+			b.Render(m, []ntimgui.DrawCmd{c}, RenderOptions{})
 			got, mask = pixels(a), pixels(m)
 		})
 		check := func(p color.RGBA, alpha float64) {
@@ -205,10 +205,10 @@ func TestMeasuredTextSymbolsAndCleanup(t *testing.T) {
 		face := &text.GoTextFace{Source: source, Size: 17}
 		b := New(WithFontFaces(face, nil))
 		_, width = textRuns("Wi ✓ ▾", face)
-		for i, align := range []ntui.Align{ntui.AlignLeft, ntui.AlignCenter, ntui.AlignRight} {
+		for i, align := range []ntimgui.Align{ntimgui.AlignLeft, ntimgui.AlignCenter, ntimgui.AlignRight} {
 			dst := ebiten.NewImage(200, 40)
-			c := ntui.DrawCmd{Kind: ntui.CmdText, Bounds: ntui.Rect{W: 20, H: 2}, Clip: ntui.Rect{W: 20, H: 2}, Text: "Wi ✓ ▾", Align: align, Style: ntui.WidgetStyle{FG: ntui.RGB(255, 255, 255)}}
-			b.Render(dst, []ntui.DrawCmd{c}, RenderOptions{ScaleX: 10, ScaleY: 20})
+			c := ntimgui.DrawCmd{Kind: ntimgui.CmdText, Bounds: ntimgui.Rect{W: 20, H: 2}, Clip: ntimgui.Rect{W: 20, H: 2}, Text: "Wi ✓ ▾", Align: align, Style: ntimgui.WidgetStyle{FG: ntimgui.RGB(255, 255, 255)}}
+			b.Render(dst, []ntimgui.DrawCmd{c}, RenderOptions{ScaleX: 10, ScaleY: 20})
 			imgs[i] = pixels(dst)
 			if b.regular != face {
 				failure = "font was recreated"
@@ -216,7 +216,7 @@ func TestMeasuredTextSymbolsAndCleanup(t *testing.T) {
 			if i == 2 {
 				b.Dispose()
 				b.Dispose()
-				b.Render(dst, []ntui.DrawCmd{c}, RenderOptions{})
+				b.Render(dst, []ntimgui.DrawCmd{c}, RenderOptions{})
 				if !bytes.Equal(imgs[i].Pix, pixels(dst).Pix) {
 					failure = "disposed backend drew"
 				}
@@ -258,7 +258,7 @@ func TestMeasuredTextSymbolsAndCleanup(t *testing.T) {
 		defer dst.Dispose()
 		for _, r := range symbols {
 			dst.Clear()
-			b.Render(dst, []ntui.DrawCmd{{Kind: ntui.CmdText, Bounds: ntui.Rect{W: 3, H: 1}, Clip: ntui.Rect{W: 3, H: 1}, Text: string(r), Style: ntui.WidgetStyle{FG: ntui.RGB(255, 255, 255)}}}, RenderOptions{})
+			b.Render(dst, []ntimgui.DrawCmd{{Kind: ntimgui.CmdText, Bounds: ntimgui.Rect{W: 3, H: 1}, Clip: ntimgui.Rect{W: 3, H: 1}, Text: string(r), Style: ntimgui.WidgetStyle{FG: ntimgui.RGB(255, 255, 255)}}}, RenderOptions{})
 			p := pixels(dst)
 			ink := false
 			for i := 3; i < len(p.Pix); i += 4 {
@@ -285,17 +285,17 @@ func TestVisualContactSheet(t *testing.T) {
 		dst := ebiten.NewImage(700, 430)
 		defer dst.Dispose()
 		dst.Fill(color.RGBA{20, 24, 32, 255})
-		vectorBG := ntui.DrawCmd{Kind: ntui.CmdRect, Bounds: ntui.Rect{X: 38, W: 40, H: 24}, Clip: ntui.Rect{W: 80, H: 24}, Style: ntui.WidgetStyle{BG: ntui.RGB(240, 242, 246)}}
-		b.Render(dst, []ntui.DrawCmd{vectorBG}, RenderOptions{})
+		vectorBG := ntimgui.DrawCmd{Kind: ntimgui.CmdRect, Bounds: ntimgui.Rect{X: 38, W: 40, H: 24}, Clip: ntimgui.Rect{W: 80, H: 24}, Style: ntimgui.WidgetStyle{BG: ntimgui.RGB(240, 242, 246)}}
+		b.Render(dst, []ntimgui.DrawCmd{vectorBG}, RenderOptions{})
 		for col := 0; col < 2; col++ {
 			for i := 0; i < 7; i++ {
-				kind := ntui.DrawCmdKind(min(i, 5))
+				kind := ntimgui.DrawCmdKind(min(i, 5))
 				c := command(kind)
-				c.Bounds = ntui.Rect{X: 2 + col*38, Y: 1 + i*3, W: 32, H: 3}
-				c.Clip = ntui.Rect{W: 80, H: 24}
+				c.Bounds = ntimgui.Rect{X: 2 + col*38, Y: 1 + i*3, W: 32, H: 3}
+				c.Clip = ntimgui.Rect{W: 80, H: 24}
 				c.Histogram = i == 6
-				c.Text = "ntui  ✓  ▾  ◂  ●  ○"
-				b.Render(dst, []ntui.DrawCmd{c}, RenderOptions{})
+				c.Text = "ntimgui  ✓  ▾  ◂  ●  ○"
+				b.Render(dst, []ntimgui.DrawCmd{c}, RenderOptions{})
 			}
 		}
 		img = pixels(dst)
@@ -317,19 +317,19 @@ func TestEmptyClippedAndInvalidCommands(t *testing.T) {
 		defer b.Dispose()
 		dst := ebiten.NewImage(30, 30)
 		defer dst.Dispose()
-		c := command(ntui.CmdRect)
-		b.Render(nil, []ntui.DrawCmd{c}, RenderOptions{})
+		c := command(ntimgui.CmdRect)
+		b.Render(nil, []ntimgui.DrawCmd{c}, RenderOptions{})
 		b.Render(dst, nil, RenderOptions{})
-		b.Render(dst, []ntui.DrawCmd{c}, RenderOptions{ScaleX: math.NaN()})
-		b.Render(dst, []ntui.DrawCmd{c}, RenderOptions{ScaleY: -1})
-		b.Render(dst, []ntui.DrawCmd{c}, RenderOptions{OffsetX: math.Inf(1)})
-		c.Clip = ntui.Rect{}
-		b.Render(dst, []ntui.DrawCmd{c}, RenderOptions{})
-		c.Clip = ntui.Rect{X: 50, Y: 50, W: 10, H: 10}
-		b.Render(dst, []ntui.DrawCmd{c}, RenderOptions{})
-		c.Clip = ntui.Rect{W: 10, H: 10}
-		c.Bounds = ntui.Rect{}
-		b.Render(dst, []ntui.DrawCmd{c}, RenderOptions{})
+		b.Render(dst, []ntimgui.DrawCmd{c}, RenderOptions{ScaleX: math.NaN()})
+		b.Render(dst, []ntimgui.DrawCmd{c}, RenderOptions{ScaleY: -1})
+		b.Render(dst, []ntimgui.DrawCmd{c}, RenderOptions{OffsetX: math.Inf(1)})
+		c.Clip = ntimgui.Rect{}
+		b.Render(dst, []ntimgui.DrawCmd{c}, RenderOptions{})
+		c.Clip = ntimgui.Rect{X: 50, Y: 50, W: 10, H: 10}
+		b.Render(dst, []ntimgui.DrawCmd{c}, RenderOptions{})
+		c.Clip = ntimgui.Rect{W: 10, H: 10}
+		c.Bounds = ntimgui.Rect{}
+		b.Render(dst, []ntimgui.DrawCmd{c}, RenderOptions{})
 		got = pixels(dst)
 	})
 	for _, v := range got.Pix {

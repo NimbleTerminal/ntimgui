@@ -15,13 +15,13 @@ serves all six interactive presets at `http://localhost:8000/web/`.
 
 The `examples` module owns `go-booba` and `ntpicture`. Browser builds select
 `wasm.work` and its Bubble Tea replacement so no demo-only dependencies are
-added to `ntui`'s root module.
+added to `ntimgui`'s root module.
 
 ## Standalone Ebitengine window
 
 Run `task run-ebiten` (or `go -C examples run ./ebiten`) from the repository root.
 This opens a regular resizable desktop window with animated circles and a
-floating ntui panel. Drag its title, adjust speed, toggle pause/light theme, or
+floating ntimgui panel. Drag its title, adjust speed, toggle pause/light theme, or
 click outside the panel to pause. Tab/Shift+Tab, arrows, Enter, and Space operate
 widgets; Escape closes the window.
 

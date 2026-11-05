@@ -1,4 +1,4 @@
-module nimbleterminal.dev/ntui
+module nimbleterminal.dev/ntimgui
 
 go 1.26.8
 

@@ -14,9 +14,9 @@ import (
 
 	"charm.land/bubbles/v2/key"
 	tea "charm.land/bubbletea/v2"
+	"nimbleterminal.dev/ntimgui"
+	"nimbleterminal.dev/ntimgui/examples/internal/demohelp"
 	picture "nimbleterminal.dev/ntpicture"
-	"nimbleterminal.dev/ntui"
-	"nimbleterminal.dev/ntui/examples/internal/demohelp"
 )
 
 type tickMsg time.Time
@@ -46,9 +46,9 @@ var (
 
 type catalogModel struct {
 	session *picture.TerminalSession
-	ui      *ntui.Context
-	glyph   *ntui.GlyphBackend
-	raster  *ntui.RasterBackend
+	ui      *ntimgui.Context
+	glyph   *ntimgui.GlyphBackend
+	raster  *ntimgui.RasterBackend
 	pic     *picture.Picture
 
 	width, height int
@@ -74,7 +74,7 @@ type catalogModel struct {
 	phase       float64
 	waveData    []float64
 	histData    []float64
-	accentColor ntui.RGBA
+	accentColor ntimgui.RGBA
 
 	// Tab 3: Trees, Lists & Tables
 	selectedShader int
@@ -113,9 +113,9 @@ func newCatalogModel() *catalogModel {
 
 	m := &catalogModel{
 		session:      session,
-		ui:           ntui.New(ntui.WithScreenSize(92, 28), ntui.WithTheme(ntui.HUDTheme())),
-		glyph:        ntui.NewGlyphBackend(92, 28),
-		raster:       ntui.NewRasterBackend(9, 18),
+		ui:           ntimgui.New(ntimgui.WithScreenSize(92, 28), ntimgui.WithTheme(ntimgui.HUDTheme())),
+		glyph:        ntimgui.NewGlyphBackend(92, 28),
+		raster:       ntimgui.NewRasterBackend(9, 18),
 		pic:          pic,
 		width:        92,
 		height:       28,
@@ -130,9 +130,9 @@ func newCatalogModel() *catalogModel {
 		animateWave:  true,
 		waveData:     make([]float64, 32),
 		histData:     make([]float64, 12),
-		accentColor:  ntui.RGB(76, 154, 255),
+		accentColor:  ntimgui.RGB(76, 154, 255),
 		events: []string{
-			"Welcome to the ntui UX Catalog!",
+			"Welcome to the ntimgui UX Catalog!",
 			"Click tabs, drag panels, or press Tab.",
 			"Press 'g' to toggle Glyph / Raster.",
 		},
@@ -164,24 +164,24 @@ func (m *catalogModel) updatePlots() {
 }
 
 func (m *catalogModel) applySelectedTheme() {
-	var th ntui.Theme
+	var th ntimgui.Theme
 	switch m.themeIdx {
 	case 1:
-		th = ntui.DefaultTheme()
+		th = ntimgui.DefaultTheme()
 	case 2:
-		th = ntui.AmberTheme()
+		th = ntimgui.AmberTheme()
 	case 3:
-		th = ntui.CyberpunkTheme()
+		th = ntimgui.CyberpunkTheme()
 	case 4:
-		th = ntui.LightTheme()
+		th = ntimgui.LightTheme()
 	default:
-		th = ntui.HUDTheme()
+		th = ntimgui.HUDTheme()
 	}
-	borders := []ntui.BorderStyle{
-		ntui.BorderRounded,
-		ntui.BorderSingle,
-		ntui.BorderDouble,
-		ntui.BorderThick,
+	borders := []ntimgui.BorderStyle{
+		ntimgui.BorderRounded,
+		ntimgui.BorderSingle,
+		ntimgui.BorderDouble,
+		ntimgui.BorderThick,
 	}
 	if m.borderIdx >= 0 && m.borderIdx < len(borders) {
 		th.Border = borders[m.borderIdx]
@@ -198,7 +198,7 @@ func (m *catalogModel) buildFrame() {
 	m.ui.BeginFrame()
 
 	// Left Window: Main UX Element Catalog
-	if m.ui.BeginPanel("ntui UX Element Catalog", ntui.NewRect(1, 1, 52, 25)) {
+	if m.ui.BeginPanel("ntimgui UX Element Catalog", ntimgui.NewRect(1, 1, 52, 25)) {
 		if m.ui.TabBar("catalog_tabs", &m.activeTab, catalogTabs) {
 			m.logEvent("Switched to tab: %s", catalogTabs[m.activeTab])
 		}
@@ -307,7 +307,7 @@ func (m *catalogModel) buildFrame() {
 			m.ui.TableRow([]string{"Pass Name", "Time (ms)", "Triangles"}, colW, true)
 			m.ui.TableRow([]string{"ShadowMap", "1.12 ms", "14,200"}, colW, false)
 			m.ui.TableRow([]string{"Opaque Pbr", "3.48 ms", "28,400"}, colW, false)
-			m.ui.TableRow([]string{"ntui Overlay", "0.18 ms", "48 cmds"}, colW, false)
+			m.ui.TableRow([]string{"ntimgui Overlay", "0.18 ms", "48 cmds"}, colW, false)
 
 		case 3: // 4. Themes & Borders
 			m.ui.Label("Select Color Theme Preset:")
@@ -343,7 +343,7 @@ func (m *catalogModel) buildFrame() {
 
 	// Right Window 1: Event Log
 	rightX := 55
-	if m.ui.BeginPanel("Interaction Log", ntui.NewRect(rightX, 1, 35, 13)) {
+	if m.ui.BeginPanel("Interaction Log", ntimgui.NewRect(rightX, 1, 35, 13)) {
 		for _, ev := range m.events {
 			m.ui.Label(ev)
 		}
@@ -356,7 +356,7 @@ func (m *catalogModel) buildFrame() {
 	m.ui.EndPanel()
 
 	// Right Window 2: Live IMGUI State Inspector
-	if m.ui.BeginPanel("IMGUI State Inspector", ntui.NewRect(rightX, 15, 35, 12)) {
+	if m.ui.BeginPanel("IMGUI State Inspector", ntimgui.NewRect(rightX, 15, 35, 12)) {
 		toggleLabel := "Switch to Raster (g)"
 		if m.backendMode == 1 {
 			toggleLabel = "Switch to Glyph (g)"

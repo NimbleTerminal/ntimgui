@@ -1,4 +1,4 @@
-module nimbleterminal.dev/ntui/examples
+module nimbleterminal.dev/ntimgui/examples
 
 go 1.26.8
 
@@ -8,8 +8,8 @@ require (
 	github.com/NimbleMarkets/go-booba v0.10.3
 	github.com/hajimehoshi/ebiten/v2 v2.10.5
 	nimbleterminal.dev/ntcanvas v0.1.1
+	nimbleterminal.dev/ntimgui v0.0.0
 	nimbleterminal.dev/ntpicture v0.1.1
-	nimbleterminal.dev/ntui v0.0.0
 )
 
 require (
@@ -40,6 +40,6 @@ require (
 	golang.org/x/text v0.43.0 // indirect
 )
 
-replace nimbleterminal.dev/ntui => ..
+replace nimbleterminal.dev/ntimgui => ..
 
 tool github.com/NimbleMarkets/go-booba/cmd/booba-assets

@@ -1,6 +1,6 @@
 // Copyright (c) 2026 Neomantra Corp.
 
-package ntuiebiten
+package ntimguiebiten
 
 import (
 	"image"
@@ -9,10 +9,10 @@ import (
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/text/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
-	"nimbleterminal.dev/ntui"
+	"nimbleterminal.dev/ntimgui"
 )
 
-// Symbols used by ntui have vector fallbacks even with a limited custom font.
+// Symbols used by ntimgui have vector fallbacks even with a limited custom font.
 // Reserve one measured M advance for each symbol, preserving real measurements
 // and shaping within ordinary text runs (including proportional fonts).
 const symbols = "▾▸◂▴▼▶◀▲●◉○─▏█✓✔☑☐"
@@ -49,7 +49,7 @@ func textRuns(value string, face text.Face) ([]textRun, float64) {
 	appendText(value[start:])
 	return runs, width
 }
-func (b *Backend) drawText(dst *ebiten.Image, r image.Rectangle, value string, align ntui.Align, s ntui.WidgetStyle) {
+func (b *Backend) drawText(dst *ebiten.Image, r image.Rectangle, value string, align ntimgui.Align, s ntimgui.WidgetStyle) {
 	if value == "" || s.FG.A == 0 || r.Empty() {
 		return
 	}
@@ -67,9 +67,9 @@ func (b *Backend) drawText(dst *ebiten.Image, r image.Rectangle, value string, a
 	height := metrics.HAscent + metrics.HDescent
 	x := float64(r.Min.X)
 	switch align {
-	case ntui.AlignCenter:
+	case ntimgui.AlignCenter:
 		x += (float64(r.Dx()) - width) / 2
-	case ntui.AlignRight:
+	case ntimgui.AlignRight:
 		x = float64(r.Max.X) - width
 	}
 	y := float64(r.Min.Y) + (float64(r.Dy())-height)/2
@@ -89,7 +89,7 @@ func (b *Backend) drawText(dst *ebiten.Image, r image.Rectangle, value string, a
 		vector.FillRect(dst, float32(start), float32(y+metrics.HAscent+1), float32(width), 1, s.FG.StdNRGBA(), false)
 	}
 }
-func drawSymbol(dst *ebiten.Image, r rune, x, y, w, h float32, c ntui.RGBA) {
+func drawSymbol(dst *ebiten.Image, r rune, x, y, w, h float32, c ntimgui.RGBA) {
 	col := c.StdNRGBA()
 	cx, cy := x+w/2, y+h/2
 	radius := min(w*.38, h*.24)
