@@ -1,4 +1,8 @@
-## Breaking change: ntui is now ntimgui
+# Changelog
+
+## 0.3.0 (Unreleased)
+
+### Breaking change: ntui is now ntimgui
 
 The project is now named **ntimgui** to make its immediate-mode GUI design explicit. The Go module is `nimbleterminal.dev/ntimgui`, and the root package is `ntimgui`.
 
