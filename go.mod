@@ -6,7 +6,7 @@ require (
 	charm.land/bubbletea/v2 v2.1.1
 	github.com/hajimehoshi/ebiten/v2 v2.10.5
 	github.com/mattn/go-runewidth v0.0.31
-	golang.org/x/image v0.47.0
+	golang.org/x/image v0.48.0
 	nimbleterminal.dev/ntcanvas v0.1.4
 )
 
@@ -31,7 +31,7 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef // indirect
 	github.com/xo/terminfo v1.3.1 // indirect
-	golang.org/x/sync v0.24.0 // indirect
-	golang.org/x/sys v0.49.0 // indirect
-	golang.org/x/text v0.43.0 // indirect
+	golang.org/x/sync v0.25.0 // indirect
+	golang.org/x/sys v0.50.0 // indirect
+	golang.org/x/text v0.44.0 // indirect
 )
