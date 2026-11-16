@@ -6,7 +6,7 @@ require (
 	charm.land/bubbles/v2 v2.2.1
 	charm.land/bubbletea/v2 v2.1.1
 	github.com/hajimehoshi/ebiten/v2 v2.10.5
-	nimbleterminal.dev/booba v0.12.1
+	nimbleterminal.dev/booba v0.13.0
 	nimbleterminal.dev/ntcanvas v0.1.4
 	nimbleterminal.dev/ntimgui v0.0.0
 	nimbleterminal.dev/ntpicture v0.1.5
