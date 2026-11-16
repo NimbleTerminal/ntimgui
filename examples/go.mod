@@ -9,7 +9,7 @@ require (
 	nimbleterminal.dev/booba v0.12.1
 	nimbleterminal.dev/ntcanvas v0.1.4
 	nimbleterminal.dev/ntimgui v0.0.0
-	nimbleterminal.dev/ntpicture v0.1.5
+	nimbleterminal.dev/ntpicture v0.2.0
 )
 
 require (
@@ -34,10 +34,10 @@ require (
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/srwiley/rasterx v0.0.0-20220730225603-2ab79fcdd4ef // indirect
 	github.com/xo/terminfo v1.3.1 // indirect
-	golang.org/x/image v0.47.0 // indirect
-	golang.org/x/sync v0.24.0 // indirect
-	golang.org/x/sys v0.49.0 // indirect
-	golang.org/x/text v0.43.0 // indirect
+	golang.org/x/image v0.48.0 // indirect
+	golang.org/x/sync v0.25.0 // indirect
+	golang.org/x/sys v0.50.0 // indirect
+	golang.org/x/text v0.44.0 // indirect
 )
 
 replace nimbleterminal.dev/ntimgui => ..
