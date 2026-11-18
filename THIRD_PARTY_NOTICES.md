@@ -63,7 +63,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## charm.land/bubbletea/v2 v2.1.1
+## charm.land/bubbletea/v2 v2.1.2
 
 ```
 MIT License
@@ -89,7 +89,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## charm.land/lipgloss/v2 v2.0.6
+## charm.land/lipgloss/v2 v2.1.1
 
 ```
 MIT License
@@ -167,7 +167,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## github.com/charmbracelet/x/ansi v0.11.9
+## github.com/charmbracelet/x/ansi v0.11.10
 
 ```
 MIT License
@@ -529,7 +529,7 @@ SOFTWARE.
    limitations under the License.
 ```
 
-## github.com/ebitengine/purego v0.11.0
+## github.com/ebitengine/purego v0.11.3
 
 ```
                                  Apache License
@@ -795,7 +795,7 @@ For more information, please refer to <https://unlicense.org/>
 ---
 ```
 
-## github.com/hajimehoshi/ebiten/v2 v2.10.5
+## github.com/hajimehoshi/ebiten/v2 v2.10.6
 
 ```
                                  Apache License
@@ -1172,7 +1172,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ```
 ```
 
-## github.com/lrstanley/bubblezone/v2 v2.0.0
+## github.com/lrstanley/bubblezone/v2 v2.0.1
 
 ```
 MIT License
@@ -1374,7 +1374,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## golang.org/x/image v0.47.0
+## golang.org/x/image v0.48.0
 
 ```
 Copyright 2009 The Go Authors.
@@ -1406,7 +1406,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ```
 
-## golang.org/x/sync v0.24.0
+## golang.org/x/sync v0.25.0
 
 ```
 Copyright 2009 The Go Authors.
@@ -1438,7 +1438,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ```
 
-## golang.org/x/sys v0.49.0
+## golang.org/x/sys v0.50.0
 
 ```
 Copyright 2009 The Go Authors.
@@ -1470,7 +1470,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ```
 
-## golang.org/x/text v0.43.0
+## golang.org/x/text v0.44.0
 
 ```
 Copyright 2009 The Go Authors.
@@ -1502,7 +1502,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ```
 
-## nimbleterminal.dev/booba v0.12.1
+## nimbleterminal.dev/booba v0.13.0
 
 ```
 MIT License
@@ -1536,7 +1536,7 @@ The following files are under their respective licenses:
   * ./etc/booba.png remains **All Rights Reserved** by Neomantra Corp.  You may use it only in unmodified form and only as part of this project (e.g., in forks or distributions of the project).  You may **not** extract it for unrelated use, modify it, or redistribute it separately without explicit permission.
 ```
 
-## nimbleterminal.dev/ntcanvas v0.1.4
+## nimbleterminal.dev/ntcanvas v0.2.0
 
 ```
 MIT License
@@ -1571,7 +1571,7 @@ Browser runtime licenses are in web/licenses; regenerate dependency notices with
 `task notices`. Generated runtime assets retain their upstream licenses.
 ```
 
-## nimbleterminal.dev/ntpicture v0.1.5
+## nimbleterminal.dev/ntpicture v0.2.0
 
 ```
 MIT License
