@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.3.0 (Unreleased)
+## 0.3.0 (2026-11-18)
 
 ### Breaking change: ntui is now ntimgui
 
@@ -22,13 +22,14 @@ The Ebitengine backend and standalone example from v0.2.0 are preserved under th
 
 ### Dependencies and browser demos
 
-- Migrate Booba from `github.com/NimbleMarkets/go-booba` to `nimbleterminal.dev/booba v0.12.1`.
-- Update Bubble Tea to v2.1.1, ntcanvas to v0.1.4, ntpicture to v0.1.5, terminfo to v1.3.1, and Ultraviolet to its current revision.
+- Migrate Booba from `github.com/NimbleMarkets/go-booba` to `nimbleterminal.dev/booba v0.13.0`.
+- Update Bubble Tea to v2.1.2, Ebitengine to v2.10.6, ntcanvas and ntpicture to v0.2.0, and terminfo to v1.3.1. Refresh Ultraviolet and other transitive dependencies.
 - Update the browser-only Bubble Tea fork to Booba's compatible pinned revision.
 - Refresh ntwebterm browser runtime asset checks, documentation, and third-party license notices.
 
 ### Validation
 
+- Add visual regression tests for slider thumb placement, track fill, and color editor swatches in the glyph and raster backends. These tests passed in the local native and WebAssembly CI runs.
 - Full `task ci` passed on Linux and macOS for commit `6dbbe49a3a5532f12dedecf751d4f676a087f1ce`.
 - Native race tests, no-CGO checks, Windows compilation, WASM tests, and all six browser demo smoke tests passed.
 - GitHub Pages build and deployment succeeded.
